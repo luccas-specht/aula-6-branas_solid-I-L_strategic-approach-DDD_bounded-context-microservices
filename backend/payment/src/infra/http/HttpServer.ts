@@ -28,6 +28,7 @@ export class ExpressAdapter implements HttpServer {
   }
 
   listen(port: number): void {
+    console.log('started at:', port);
     this.app.listen(port);
   }
 }
@@ -55,6 +56,7 @@ export class HapiAdapter implements HttpServer {
   }
 
   listen(port: number): void {
+    console.log('started at:', port);
     this.server.settings.port = port;
     this.server.start();
   }
