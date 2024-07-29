@@ -1,4 +1,5 @@
 import AccountGateway from '../../src/application/gateway/AccountGateway';
+import PaymentGateway from '../../src/application/gateway/PaymentGateway';
 import AcceptRide from '../../src/application/usecase/ride/AcceptRide';
 import FinishRide from '../../src/application/usecase/ride/FinishRide';
 import GetRide from '../../src/application/usecase/ride/GetRide';
@@ -9,7 +10,8 @@ import DatabaseConnection, {
   PgPromiseAdapter,
 } from '../../src/infra/database/DatabaseConnection';
 import AccountGatewayHttp from '../../src/infra/gateway/AccountGatewayHttp';
-import { FetchAdapter } from '../../src/infra/http/HttpClient';
+import PaymentGatewayHttp from '../../src/infra/gateway/PaymentGatewayHttp';
+import { AxiosAdapter, FetchAdapter } from '../../src/infra/http/HttpClient';
 import PositionRepositoryDatabase from '../../src/infra/repository/PositionRepositoryDatabase';
 import RideRepositoryDatabase from '../../src/infra/repository/RideRepositoryDatabase';
 
@@ -21,6 +23,7 @@ let startRide: StartRide;
 let updatePosition: UpdatePosition;
 let accountGateway: AccountGateway;
 let finishRide: FinishRide;
+let paymentGateway: PaymentGateway;
 
 beforeEach(() => {
   connection = new PgPromiseAdapter();
@@ -32,7 +35,8 @@ beforeEach(() => {
   acceptRide = new AcceptRide(rideRepository, accountGateway);
   startRide = new StartRide(rideRepository);
   updatePosition = new UpdatePosition(rideRepository, positionRepository);
-  finishRide = new FinishRide(rideRepository);
+  paymentGateway = new PaymentGatewayHttp(new AxiosAdapter());
+  finishRide = new FinishRide(rideRepository, paymentGateway);
 });
 
 test('Deve finalizar uma corrida', async function () {
@@ -86,6 +90,7 @@ test('Deve finalizar uma corrida', async function () {
   await updatePosition.execute(inputUpdatePosition2);
   const inputFinishRide = {
     rideId: outputRequestRide.rideId,
+    amount: 100,
   };
   await finishRide.execute(inputFinishRide);
   const outputGetRide = await getRide.execute(outputRequestRide.rideId);

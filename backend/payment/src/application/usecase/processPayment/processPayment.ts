@@ -32,7 +32,7 @@ export default class ProcessPayment implements UseCase<Input> {
     const outputPaymentGateway = await this.paymentGateway.createTransaction(
       inputPaymentGateway
     );
-
+    console.log(outputPaymentGateway);
     if (outputPaymentGateway.status === 'approved') {
       transaction.approve();
     } else {

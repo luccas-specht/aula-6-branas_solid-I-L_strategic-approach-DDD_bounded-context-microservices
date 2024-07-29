@@ -10,7 +10,7 @@ export default class PaymentController {
       'post',
       '/process_payment',
       async (params: any, body: any) => {
-        await this.processPayment.execute(body);
+        return this.processPayment.execute(body);
       }
     );
   }

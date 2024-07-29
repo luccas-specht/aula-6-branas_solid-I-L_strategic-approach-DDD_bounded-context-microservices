@@ -1,22 +1,23 @@
-import RideRepository from "../../repository/RideRepository";
-import ProcessPayment from "../payment/ProcessPayment";
-import UseCase from "../UseCase";
+import PaymentGateway from '../../gateway/PaymentGateway';
+import RideRepository from '../../repository/RideRepository';
 
-export default class StartRide implements UseCase {
+export default class FinishRide {
+  constructor(
+    readonly rideRepository: RideRepository,
+    readonly paymentGateway: PaymentGateway
+  ) {}
 
-	constructor (readonly rideRepository: RideRepository) {
-	}
+  async execute(input: Input): Promise<void> {
+    const transactionId = await this.paymentGateway.processPayment(input);
+    if (!transactionId) throw new Error('bret');
 
-	async execute(input: Input): Promise<void> {
-		const ride = await this.rideRepository.getRideById(input.rideId);
-		ride.finish();
-		await this.rideRepository.updateRide(ride);
-		const processPayment = new ProcessPayment();
-		await processPayment.execute({ rideId: ride.rideId, amount: ride.fare });
-	}
-
+    const ride = await this.rideRepository.getRideById(input.rideId);
+    await this.rideRepository.updateRide(ride);
+    ride.finish();
+  }
 }
 
 type Input = {
-	rideId: string
-}
+  rideId: string;
+  amount: number;
+};
