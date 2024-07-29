@@ -1,3 +1,3 @@
 export default interface PaymentGateway {
-  checkout(): Promise<void>;
+  createTransaction(input: any): Promise<any>;
 }

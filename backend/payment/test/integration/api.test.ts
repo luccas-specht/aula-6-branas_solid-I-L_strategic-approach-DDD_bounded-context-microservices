@@ -5,10 +5,8 @@ axios.defaults.validateStatus = function () {
 };
 
 test('should call controller correctly', async function () {
-  const result = await axios.post('http://localhost:3002/payment', {
-    opa: 'oiiii',
+  await axios.post('http://localhost:3002/payment_transaction', {
+    rideId: 'opa',
+    amount: 50,
   });
-
-  console.log(result.data);
-  expect(result.data).toBe({ opa: 'oiiii' });
 });

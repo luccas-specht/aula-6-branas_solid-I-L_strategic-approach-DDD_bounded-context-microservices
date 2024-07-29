@@ -1,14 +1,12 @@
 export default class ProcessPayment {
+  constructor() {}
 
-	constructor () {
-	}
-
-	async execute (input: Input): Promise<void> {
-		console.log(input);
-	}
+  async execute(input: Input): Promise<void> {
+    console.log(input);
+  }
 }
 
 type Input = {
-	rideId: string,
-	amount: number
-}
+  rideId: string;
+  amount: number;
+};

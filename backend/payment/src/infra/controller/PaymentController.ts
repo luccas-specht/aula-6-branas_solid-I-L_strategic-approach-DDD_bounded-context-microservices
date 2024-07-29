@@ -1,4 +1,4 @@
-import ProcessPayment from '../../application/usecase/processPayment/processPayment';
+import ProcessPayment from '../../application/usecase/ProcessPayment/ProcessPayment';
 import HttpServer from '../http/HttpServer';
 
 export default class PaymentController {
@@ -8,12 +8,10 @@ export default class PaymentController {
   ) {
     this.httpServer.register(
       'post',
-      '/payment',
+      '/payment_transaction',
       async (params: any, body: any) => {
         const input = body;
-        console.log({ input });
-        const output = await this.processPayment.execute(input);
-        return output;
+        await this.processPayment.execute(input);
       }
     );
   }
