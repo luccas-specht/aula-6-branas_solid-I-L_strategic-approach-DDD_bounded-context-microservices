@@ -4,7 +4,7 @@ export default class Transaction {
     readonly amount: number,
     readonly transactionId: string,
     readonly date: Date,
-    readonly status: string
+    public status: string
   ) {
     this.rideId = rideId;
     this.amount = amount;
@@ -13,8 +13,18 @@ export default class Transaction {
     this.status = status;
   }
 
-  static create(rideId: string, amount: number, date: Date, status: string) {
+  static create(rideId: string, amount: number) {
     const transactionId = crypto.randomUUID();
+    const status = 'pending';
+    const date = new Date();
     return new Transaction(rideId, amount, transactionId, date, status);
+  }
+
+  approve() {
+    this.status = 'approved';
+  }
+
+  reject() {
+    this.status = 'rejected';
   }
 }

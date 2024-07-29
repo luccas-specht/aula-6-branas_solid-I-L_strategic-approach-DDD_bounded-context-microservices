@@ -6,12 +6,11 @@ export default class PaymentController {
     readonly httpServer: HttpServer,
     readonly processPayment: ProcessPayment
   ) {
-    this.httpServer.register(
+    httpServer.register(
       'post',
-      '/payment_transaction',
+      '/process_payment',
       async (params: any, body: any) => {
-        const input = body;
-        await this.processPayment.execute(input);
+        await this.processPayment.execute(body);
       }
     );
   }
