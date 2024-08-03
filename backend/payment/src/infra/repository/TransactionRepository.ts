@@ -8,7 +8,6 @@ export default class TransactionRepositoryDatabase
   constructor(readonly connection: DatabaseConnection) {}
 
   async save(transaction: Transaction): Promise<void> {
-    console.log({ aaaaaaaaaaaaaaaa: transaction });
     await this.connection.query(
       'insert into cccat17.transaction (transaction_id, ride_id, amount, status, date) values ($1, $2, $3, $4, $5)',
       [

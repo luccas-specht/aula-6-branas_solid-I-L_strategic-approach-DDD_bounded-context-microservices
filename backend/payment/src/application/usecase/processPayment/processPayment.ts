@@ -1,26 +1,16 @@
 import Transaction from '../../../domain/entity/Transaction';
 import PaymentGateway from '../../gateway/PaymentGateway';
 import TransactionRepository from '../../repository/TransactionRepository';
-import UseCase from '../UseCase';
 
-type Input = {
-  rideId: string;
-  amount: number;
-};
-
-type Output = {
-  transactionId: string;
-};
-
-export default class ProcessPayment implements UseCase<Input> {
+export default class ProcessPayment {
   constructor(
     readonly transactionRepository: TransactionRepository,
     readonly paymentGateway: PaymentGateway
   ) {}
 
   async execute(input: Input): Promise<Output> {
-    console.log('processPayment', input);
     const transaction = Transaction.create(input.rideId, input.amount);
+
     const inputPaymentGateway = {
       cardHolder: 'Cliente Exemplo',
       creditCardNumber: '4012001037141112',
@@ -32,7 +22,7 @@ export default class ProcessPayment implements UseCase<Input> {
     const outputPaymentGateway = await this.paymentGateway.createTransaction(
       inputPaymentGateway
     );
-    console.log(outputPaymentGateway);
+
     if (outputPaymentGateway.status === 'approved') {
       transaction.approve();
     } else {
@@ -46,3 +36,12 @@ export default class ProcessPayment implements UseCase<Input> {
     };
   }
 }
+
+type Input = {
+  rideId: string;
+  amount: number;
+};
+
+type Output = {
+  transactionId: string;
+};

@@ -1,21 +1,17 @@
 import TransactionRepository from '../../application/repository/TransactionRepository';
+import Transaction from '../../domain/entity/Transaction';
 
-export default class TransactionRepositoryFake
+export default class TransactionRepositoryInMemory
   implements TransactionRepository
 {
-  private table: any = [];
+  private table: any[] = [];
   constructor() {}
-  async createTransaction(rideId: string, amount: number): Promise<string> {
-    const transaction = {
-      transactionId: `id-${Math.random()}`,
-      rideId,
-      amount,
-      date: new Date(),
-      status: 'success',
-    };
 
+  async save(transaction: Transaction): Promise<void> {
     this.table.push(transaction);
+  }
 
-    return transaction.transactionId;
+  async get(transactionId: string): Promise<Transaction> {
+    return this.table.find((transaction) => transaction.id === transactionId);
   }
 }

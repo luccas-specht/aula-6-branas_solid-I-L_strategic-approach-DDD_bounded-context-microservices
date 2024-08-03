@@ -30,7 +30,7 @@ export default class PJBankGateway implements PaymentGateway {
       data: creditCard,
     };
     const output1 = await axios(request1);
-    console.log({ output1 });
+
     let transaction = {
       pedido_numero: '1',
       token_cartao: output1.data.token_cartao,
@@ -51,7 +51,6 @@ export default class PJBankGateway implements PaymentGateway {
 
     const output2 = (await axios(request2)).data;
     // ACL - Anti Corruption Layer
-    console.log({ output2 });
     let status = 'rejected';
     if (output2.autorizada === '1') {
       status = 'approved';
